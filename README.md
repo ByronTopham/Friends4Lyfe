@@ -1,5 +1,5 @@
-# Friends4Lyfe
+# The Stockulator
 
-Group 1 SRE
+## Group 1 SREC396
 
-H
+It's a calculator...For stocky things.
