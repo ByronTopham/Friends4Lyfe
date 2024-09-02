@@ -9,7 +9,8 @@ stock_prices = {
     'GOOGL': 2800.0,
     'AMZN': 3500.0,
     'TSLA': 700.0,
-    'MSFT': 300.0
+    'MSFT': 300.0,
+    'WLMRT': 225.0 
 }
 
 @app.route('/calculate', methods=['GET'])

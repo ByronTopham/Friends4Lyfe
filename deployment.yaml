@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stock-calculator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stock-calculator
+  template:
+    metadata:
+      labels:
+        app: stock-calculator
+    spec:
+      containers:
+        - name: stock-calculator
+          image: stock-calculator:latest
+          ports:
+            - containerPort: 5000
