@@ -4,7 +4,7 @@ pipeline {
     environment {
         GIT_REPO = 'https://github.com/akanshapal2024/stock-calculator.git'
         DOCKER_IMAGE = 'akanshapal/stock-calculator:latest'
-        KUBE_NAMESPACE = 'default' // Kubernetes namespace to deploy to
+        KUBE_NAMESPACE = 'c396-byron-dev' // Kubernetes namespace to deploy to
     }
 
     stages {
