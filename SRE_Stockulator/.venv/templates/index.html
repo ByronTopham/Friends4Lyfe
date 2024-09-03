@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stockulator</title>
+</head>
+<body>
+    <h1>STOCKULATOR</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+        {% for message in messages %}
+          <li style="color:red;">{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <label for="stockname">Stock Name:</label>
+        <input type="text" id="stockname" name="stockname" value="AAPL"><br><br>
+
+        <label for="start">Start Date:</label>
+        <input type="text" id="start" name="start" placeholder="01/01/2020"><br><br>
+
+        <label for="end">End Date:</label>
+        <input type="text" id="end" name="end" placeholder="01/01/2023"><br><br>
+
+        <label for="timestep">Time Step:</label>
+        <select id="timestep" name="timestep">
+            <option value="1 day">1 Day</option>
+            <option value="1 hour">1 Hour</option>
+            <option value="1 week">1 Week</option>
+        </select><br><br>
+
+        <label for="color">Color:</label>
+        <select id="color" name="color">
+            <option value="blue">Blue</option>
+            <option value="red">Red</option>
+            <option value="green">Green</option>
+        </select><br><br>
+
+        <button type="submit">Generate</button>
+    </form>
+
+    {% if request.args.get('filename') %}
+        <h2>Generated Graph:</h2>
+        <img src="{{ url_for('static', filename=request.args.get('filename')) }}" alt="Stock Graph">
+    {% endif %}
+</body>
+</html>
