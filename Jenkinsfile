@@ -5,7 +5,7 @@ pipeline {
         
         GIT_REPO = 'https://github.com/ByronTopham/Friends4Lyfe.git'
         DOCKER_IMAGE = 'akanshapal/stock-calculator-final:latest'
-        KUBE_NAMESPACE = 'jenkins' // Kubernetes namespace to deploy to
+        KUBE_NAMESPACE = 'default' // Kubernetes namespace to deploy to
         AWS_CREDENTIALS_ID = 'aws-credentials-id'
     }
 
