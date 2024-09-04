@@ -16,5 +16,5 @@ RUN pip install flask
 EXPOSE 5000
 
 # Run app.py when the container launches
-CMD ["python3", "app.py"]
+CMD ["python3", "SRE_Stockulator/.venv/main.py"]
 
