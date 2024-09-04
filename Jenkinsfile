@@ -3,9 +3,9 @@ pipeline {
     
     environment {
         
-        GIT_REPO = 'https://github.com/akanshapal2024/stock-calculator.git'
+        GIT_REPO = 'https://github.com/ByronTopham/Friends4Lyfe.git'
         DOCKER_IMAGE = 'akanshapal/stock-calculator:latest'
-        KUBE_NAMESPACE = 'default' // Kubernetes namespace to deploy to
+        KUBE_NAMESPACE = 'jenkins' // Kubernetes namespace to deploy to
         AWS_CREDENTIALS_ID = 'aws-credentials-id'
     }
 
@@ -53,8 +53,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 withAWS(credentials: "${AWS_CREDENTIALS_ID}", region: 'us-west-2') {
-			bat 'aws s3 ls' // Example command
 			bat 'kubectl apply -f deployment.yaml'
+			bat 'kubectl apply -f network-policy.yaml'
 			bat 'kubectl get pods --show-labels'
                 }
             }
