@@ -53,8 +53,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 withAWS(credentials: "${AWS_CREDENTIALS_ID}", region: 'us-west-2') {
-			bat 'aws s3 ls' // Example command
 			bat 'kubectl apply -f deployment.yaml'
+			bat 'kubectl apply -f network-policy.yaml'
 			bat 'kubectl get pods --show-labels'
                 }
             }
