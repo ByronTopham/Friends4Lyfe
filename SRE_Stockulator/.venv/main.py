@@ -7,6 +7,7 @@ import yfinance as yf
 import os
 import numpy as np
 from flask import Flask, render_template, request, redirect, url_for, flash
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Needed for flash messages
@@ -27,6 +28,18 @@ def index():
         try:
             start_date_parsed = pd.to_datetime(start_date.strip())  # 'YYYY-MM-DD' format from date picker
             end_date_parsed = pd.to_datetime(end_date.strip())
+            current_date = pd.to_datetime(datetime.now())  # Get the current date
+
+            # Check if the start date is after the end date, and swap them if necessary
+            if start_date_parsed > end_date_parsed:
+                start_date_parsed, end_date_parsed = end_date_parsed, start_date_parsed
+                flash("Start date was after the end date, so the dates have been swapped.")
+
+            # Clip the end date to the current date if it's in the future
+            if end_date_parsed > current_date:
+                end_date_parsed = current_date
+                flash(f"End date was after the current date and has been clipped to {current_date.strftime('%Y-%m-%d')}.")
+
             print(f"Parsed start date: {start_date_parsed}, Parsed end date: {end_date_parsed}")  # Debugging line
         except ValueError:
             flash("Invalid date format. Please use the date picker.")
@@ -40,6 +53,11 @@ def index():
         # Download stock1 data from yfinance
         data1 = yf.download(stock1, start=start_date_parsed, end=end_date_parsed)
 
+        # Check if data1 is empty
+        if data1.empty:
+            flash(f"No data found for {stock1} within the specified date range.")
+            return redirect(url_for('index'))
+
         # Resample data based on time_step
         if time_step == "1 week":
             data1 = data1.resample('W').ffill()  # Resample weekly
@@ -48,6 +66,10 @@ def index():
         data2 = None
         if stock2:
             data2 = yf.download(stock2, start=start_date_parsed, end=end_date_parsed)
+            # Check if data2 is empty
+            if data2.empty:
+                flash(f"No data found for {stock2} within the specified date range.")
+                return redirect(url_for('index'))
             if time_step == "1 week":
                 data2 = data2.resample('W').ffill()  # Resample weekly
 
@@ -61,9 +83,17 @@ def index():
         if show_best_fit:
             x_values = np.arange(len(data1))  # Create a sequence of numbers as x-axis values
             y_values = data1['Close'].values
-            coeffs = np.polyfit(x_values, y_values, 1)  # Linear regression (1st-degree polynomial)
-            best_fit_line = np.polyval(coeffs, x_values)  # Generate y-values for the line
-            ax.plot(data1.index, best_fit_line, color='orange', linestyle='--', label=f'{stock1} Best Fit')
+
+            # Check for NaN, Inf, or degenerate data
+            if len(x_values) > 1 and len(np.unique(y_values)) > 1 and np.all(np.isfinite(y_values)):
+                try:
+                    coeffs = np.polyfit(x_values, y_values, 1)  # Linear regression (1st-degree polynomial)
+                    best_fit_line = np.polyval(coeffs, x_values)  # Generate y-values for the line
+                    ax.plot(data1.index, best_fit_line, color='orange', linestyle='--', label=f'{stock1} Best Fit')
+                except np.linalg.LinAlgError:
+                    flash(f"Could not generate a line of best fit for {stock1} due to data issues.")
+            else:
+                flash(f"Insufficient data to generate a best fit line for {stock1}.")
 
         # Plot stock 2 (if selected)
         if data2 is not None:
@@ -73,9 +103,17 @@ def index():
             if show_best_fit:
                 x_values2 = np.arange(len(data2))
                 y_values2 = data2['Close'].values
-                coeffs2 = np.polyfit(x_values2, y_values2, 1)
-                best_fit_line2 = np.polyval(coeffs2, x_values2)
-                ax.plot(data2.index, best_fit_line2, color='purple', linestyle='--', label=f'{stock2} Best Fit')
+
+                # Check for NaN, Inf, or degenerate data
+                if len(x_values2) > 1 and len(np.unique(y_values2)) > 1 and np.all(np.isfinite(y_values2)):
+                    try:
+                        coeffs2 = np.polyfit(x_values2, y_values2, 1)
+                        best_fit_line2 = np.polyval(coeffs2, x_values2)
+                        ax.plot(data2.index, best_fit_line2, color='purple', linestyle='--', label=f'{stock2} Best Fit')
+                    except np.linalg.LinAlgError:
+                        flash(f"Could not generate a line of best fit for {stock2} due to data issues.")
+                else:
+                    flash(f"Insufficient data to generate a best fit line for {stock2}.")
 
         # Reduce axis text size by 25%
         ax.set_xlabel("Date", fontsize=9)
@@ -105,8 +143,8 @@ def index():
 
         # Pass back the form data to retain in the form after submission
         return render_template('index.html',
-                               start=start_date,
-                               end=end_date,
+                               start=start_date_parsed.strftime('%Y-%m-%d'),
+                               end=end_date_parsed.strftime('%Y-%m-%d'),  # Send back clipped date if necessary
                                stockname=stock1,
                                stockname2=stock2,
                                color1=request.form['color1'],
