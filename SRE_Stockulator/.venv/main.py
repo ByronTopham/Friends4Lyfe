@@ -53,9 +53,9 @@ def index():
         # Download stock1 data from yfinance
         data1 = yf.download(stock1, start=start_date_parsed, end=end_date_parsed)
 
-        # Check if data1 is empty
-        if data1.empty:
-            flash(f"No data found for {stock1} within the specified date range.")
+        # Check if data1 has at least 2 points
+        if len(data1) < 2:
+            flash(f"Not enough data points to generate the graph for {stock1}. At least 2 data points are required.")
             return redirect(url_for('index'))
 
         # Resample data based on time_step
@@ -66,10 +66,12 @@ def index():
         data2 = None
         if stock2:
             data2 = yf.download(stock2, start=start_date_parsed, end=end_date_parsed)
-            # Check if data2 is empty
-            if data2.empty:
-                flash(f"No data found for {stock2} within the specified date range.")
+
+            # Check if data2 has at least 2 points
+            if len(data2) < 2:
+                flash(f"Not enough data points to generate the graph for {stock2}. At least 2 data points are required.")
                 return redirect(url_for('index'))
+
             if time_step == "1 week":
                 data2 = data2.resample('W').ffill()  # Resample weekly
 
