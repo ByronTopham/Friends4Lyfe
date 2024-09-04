@@ -11,7 +11,7 @@ COPY SRE_Stockulator/.venv ./.venv
 COPY SRE_Stockulator/.venv/main.py .
 
 # Copy the requirements.txt file
-COPY SRE_Stockulator/requirements.txt ./requirements.txt
+COPY requirements.txt ./requirements.txt
 
 # Install dependencies using pip from within the virtual environment
 RUN ./.venv/bin/pip install --no-cache-dir --upgrade pip && \
