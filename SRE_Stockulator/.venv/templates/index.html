@@ -8,6 +8,7 @@
 <body>
     <h1>STOCKULATOR</h1>
 
+    <!-- Display flash messages -->
     {% with messages = get_flashed_messages() %}
       {% if messages %}
         <ul>
@@ -20,34 +21,47 @@
 
     <form method="POST">
         <label for="stockname">Stock Name:</label>
-        <input type="text" id="stockname" name="stockname" value="AAPL"><br><br>
+        <input type="text" id="stockname" name="stockname" value="{{ stockname or 'AAPL' }}"><br><br>
 
         <label for="start">Start Date:</label>
-        <input type="text" id="start" name="start" placeholder="01/01/2020"><br><br>
+        <input type="date" id="start" name="start" value="{{ start or '2020-01-01' }}"><br><br>
 
         <label for="end">End Date:</label>
-        <input type="text" id="end" name="end" placeholder="01/01/2023"><br><br>
+        <input type="date" id="end" name="end" value="{{ end or '2023-01-01' }}"><br><br>
 
         <label for="timestep">Time Step:</label>
         <select id="timestep" name="timestep">
-            <option value="1 day">1 Day</option>
-            <option value="1 hour">1 Hour</option>
-            <option value="1 week">1 Week</option>
+            <option value="1 day" {% if time_step == '1 day' %}selected{% endif %}>1 Day</option>
+            <option value="1 week" {% if time_step == '1 week' %}selected{% endif %}>1 Week</option>
         </select><br><br>
 
-        <label for="color">Color:</label>
-        <select id="color" name="color">
-            <option value="blue">Blue</option>
-            <option value="red">Red</option>
-            <option value="green">Green</option>
+        <label for="color1">Color for Stock 1:</label>
+        <select id="color1" name="color1">
+            <option value="blue" {% if color1 == 'blue' %}selected{% endif %}>Blue</option>
+            <option value="red" {% if color1 == 'red' %}selected{% endif %}>Red</option>
+            <option value="green" {% if color1 == 'green' %}selected{% endif %}>Green</option>
         </select><br><br>
+
+        <label for="stockname2">Second Stock Name (optional):</label>
+        <input type="text" id="stockname2" name="stockname2" value="{{ stockname2 or '' }}" placeholder="Enter second stock symbol"><br><br>
+
+        <label for="color2">Color for Stock 2:</label>
+        <select id="color2" name="color2">
+            <option value="red" {% if color2 == 'red' %}selected{% endif %}>Red</option>
+            <option value="green" {% if color2 == 'green' %}selected{% endif %}>Green</option>
+            <option value="blue" {% if color2 == 'blue' %}selected{% endif %}>Blue</option>
+        </select><br><br>
+
+        <label for="bestfit">Add Line of Best Fit:</label>
+        <input type="checkbox" id="bestfit" name="bestfit" {% if bestfit_checked %}checked{% endif %}><br><br>
 
         <button type="submit">Generate</button>
     </form>
 
-    {% if request.args.get('filename') %}
+    <!-- Display the generated graph -->
+    {% if filename %}
         <h2>Generated Graph:</h2>
-        <img src="{{ url_for('static', filename=request.args.get('filename')) }}" alt="Stock Graph">
+        <img src="{{ url_for('static', filename=filename) }}" alt="Stock Graph">
     {% endif %}
 </body>
 </html>
