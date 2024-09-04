@@ -14,8 +14,7 @@ COPY SRE_Stockulator/.venv/main.py .
 COPY requirements.txt ./requirements.txt
 
 # Install dependencies using pip from within the virtual environment
-RUN ./.venv/bin/pip install --no-cache-dir --upgrade pip && \
-    ./.venv/bin/pip install -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && pip install -r requirements.txt
 
 # Expose the port that the Flask app will run on (default Flask port 5000)
 EXPOSE 5000
