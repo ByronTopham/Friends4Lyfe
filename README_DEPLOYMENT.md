@@ -67,6 +67,7 @@ The `network-policy.yaml` defines the network rules for controlling the communic
     - **podSelector:** Specifies the pods this network policy applies to.
     - **policyTypes:** Defines whether this is an ingress or egress policy.
     - **ingress/egress:** Defines the allowed traffic rules, such as allowed ports and IP ranges.
+
 To enforce the network policy, apply the `network-policy.yaml`:
 ```bash
   kubectl apply -f network-policy.yaml
