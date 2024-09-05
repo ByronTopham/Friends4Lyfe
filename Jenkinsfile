@@ -6,12 +6,14 @@ pipeline {
         DOCKER_IMAGE = 'akanshapal/stock-calculator-final:latest'
         KUBE_NAMESPACE = 'default' // Kubernetes namespace to deploy to
         AWS_CREDENTIALS_ID = 'aws-credentials-id'
+        PYTHON_PATH = 'C:\\Users\\pawan\\AppData\\Local\\Programs\\Python\\Python312\\python.exe'
+        PYTHONHOME = 'C:\\Users\\pawan\\AppData\\Local\\Programs\\Python\\Python312'  // Set PYTHONHOME to the base Python directory
+        PYTHONPATH = 'C:\\Users\\pawan\\AppData\\Local\\Programs\\Python\\Python312\\Lib;C:\\Users\\pawan\\AppData\\Local\\Programs\\Python\\Python312\\DLLs'  // Set PYTHONPATH to the library paths
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                // Clone the Git repository
                 git branch: 'main', credentialsId: 'git-credentials', url: "${GIT_REPO}"
             }
         }
@@ -19,8 +21,8 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
-                    // Run the test cases
-                    bat '"C:\\Users\\pawan\\AppData\\Local\\Programs\\Python\\Python312\\python.exe" Friends4Lyfe/tests/unit_test.py'
+                    // Run the test cases using the configured Python executable
+                    bat "\"${PYTHON_PATH}\" Friends4Lyfe/tests/unit_test.py"
                 }
             }
         }
@@ -28,7 +30,6 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Run the Docker build command using bat (Windows batch command)
                     bat "docker build -t ${DOCKER_IMAGE} ."
                 }
             }
@@ -37,12 +38,8 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Replace 'dockerhub-credentials' with your Jenkins Docker credentials ID
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKERHUB_PASS', usernameVariable: 'DOCKERHUB_USER')]) {
-                        // Log in to Docker Hub or your Docker registry
                         bat "docker login -u %DOCKERHUB_USER% -p %DOCKERHUB_PASS%"
-
-                        // Push the Docker image
                         bat "docker push ${DOCKER_IMAGE}"
                     }
                 }
