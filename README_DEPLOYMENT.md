@@ -21,6 +21,8 @@ The Flask app is containerized using Docker, ensuring consistent environments ac
   - Isolation of applications and their dependencies.
   - Portability across environments.
   - Simplified testing and deployment process.
+
+
 To build a Docker image of the Flask app:
   ```bash
   docker build -t <your-image-name> .
@@ -48,6 +50,7 @@ The `deployment.yaml` is a Kubernetes resource definition file that describes th
     - **replicas:** Number of replicas (e.g., replicas: 3).
     - **template:**
       - **containers:**  Defines the container image and its properties (e.g., ports, environment variables).
+
 To apply the `deployment.yaml` and deploy the application:
 ```bash
   kubectl apply -f deployment.yaml
