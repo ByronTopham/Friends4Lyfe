@@ -14,7 +14,7 @@ import psutil
 from time import time
 
 
-app = Flask(__name__) ##remove static_folder for local run
+app = Flask(__name__,static_folder='/app/static') ##remove static_folder for local run
 app.secret_key = 'your_secret_key'
 
 
@@ -89,9 +89,16 @@ http_500_errors = Counter('http_500_errors', 'Number of HTTP 500 errors (interna
 request_latency = Histogram('request_latency_seconds', 'Request latency in seconds', buckets=[0.1, 0.5, 1.0, 2.5, 5.0, 10.0])
 graph_generation_latency = Histogram('graph_generation_latency_seconds', 'Latency of graph generation in seconds', buckets=[0.1, 0.5, 1.0, 2.5, 5.0, 10.0])
 
+
+
 @app.before_request
-def start_timer():
+def before_request():
     request.start_time = time()
+    total_requests.inc()
+    cpu_usage.set(psutil.cpu_percent(interval=1))
+    memory_usage.set(psutil.virtual_memory().percent)
+
+
 
 # After each request, calculate the elapsed time and record it in the histogram
 @app.after_request
@@ -105,20 +112,7 @@ def handle_500_error(error):
     http_500_errors.inc()  # Increment the 500 error counter
     return render_template('500.html'), 500
 
-@app.before_request
-def track_request():
-    total_requests.inc()
-def update_resource_usage():
-    # Update CPU and memory usage
-    cpu_usage.set(psutil.cpu_percent(interval=1))
-    memory_usage.set(psutil.virtual_memory().percent)
 
-@app.before_request
-def track_resource_usage():
-    update_resource_usage()
-@app.before_request
-def track_resource_usage():
-    update_resource_usage()
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -221,9 +215,7 @@ def index():
             if show_best_fit:
                 best_fit_usage.inc()
 
-            if total_graph_generations._value.get() > 0:  # Avoid division by zero
-                percentage = (best_fit_usage._value.get() / total_graph_generations._value.get()) * 100
-                best_fit_percentage.set(percentage)
+
 
             print("Generating graph")  # Debugging line
             with graph_generation_latency.time():
@@ -353,6 +345,8 @@ def index():
                 if total_graph_generations._value.get() > 0:  # Avoid division by zero
                     percentage_compare = (compare_usage._value.get() / total_graph_generations._value.get()) * 100
                     compare_percentage.set(percentage_compare)
+                    percentage = (best_fit_usage._value.get() / total_graph_generations._value.get()) * 100
+                    best_fit_percentage.set(percentage)
                 # Customize the graph
                 ax.set_xlabel("Date", fontsize=9)
                 ax.set_ylabel("Price", fontsize=9)
