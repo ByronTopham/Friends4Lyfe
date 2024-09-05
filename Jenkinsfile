@@ -21,7 +21,7 @@ pipeline {
             steps {
                 script {
                     // Activate the virtual environment and install dependencies
-                    bat "PYTHON_PATH -m pip install --upgrade pip && pip install -r requirements.txt"
+                    bat "%PYTHON_PATH% -m pip install --upgrade pip && pip install -r requirements.txt"
                 }
             }
         }
@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     // Activate the virtual environment and run the test cases
-                    bat "PYTHON_PATH Friends4Lyfe/tests/unit_test.py"
+                    bat "%PYTHON_PATH% Friends4Lyfe/tests/unit_test.py"
                 }
             }
         }
