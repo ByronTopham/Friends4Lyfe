@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     // Activate the virtual environment and install dependencies
-                    bat ".\\venv\\Scripts\\activate && python -m pip install --upgrade pip && pip install -r requirements.txt"
+                    bat ".\\venv\\Scripts\\activate && PYTHON_PATH -m pip install --upgrade pip && pip install -r requirements.txt"
                 }
             }
         }
@@ -39,7 +39,7 @@ pipeline {
             steps {
                 script {
                     // Activate the virtual environment and run the test cases
-                    bat ".\\venv\\Scripts\\activate && python Friends4Lyfe/tests/unit_test.py"
+                    bat ".\\venv\\Scripts\\activate && PYTHON_PATH Friends4Lyfe/tests/unit_test.py"
                 }
             }
         }
