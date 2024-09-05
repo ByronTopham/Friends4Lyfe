@@ -21,7 +21,7 @@ RUN mkdir -p /app/db && chmod -R 755 /app/db
 RUN mkdir -p /app/static && chmod -R 777 /app/static
 
 # Set environment variables
-ENV FLASK_APP=main.py
+ENV FLASK_APP=app/main.py
 
 # Expose the port the Flask app runs on
 EXPOSE 5000
