@@ -9,16 +9,22 @@ RUN apt-get update && apt-get install -y sqlite3 libsqlite3-dev
 
 # Copy the necessary files into the container
 COPY requirements.txt .
+
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy your application code into the container
 COPY . .
 
+# Create directories and set permissions
+RUN mkdir -p /app/db && chmod -R 755 /app/db
+RUN mkdir -p /app/static && chmod -R 777 /app/static
+
+# Set environment variables
+ENV FLASK_APP=SRE_Stockulator/.venv/main.py
+
 # Expose the port the Flask app runs on
 EXPOSE 5000
 
-RUN mkdir -p /app/db && chmod -R 755 /app/db
-
-ENV FLASK_APP=SRE_Stockulator/.venv/main.py
-
+# Run the Flask application
 CMD ["flask", "run", "--host", "0.0.0.0"]
