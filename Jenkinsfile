@@ -17,20 +17,11 @@ pipeline {
             }
         }
 
-        stage('Setup Virtual Environment') {
-            steps {
-                script {
-                    // Create a virtual environment using the correct Python executable
-                    bat "\"${PYTHON_PATH}\" -m venv venv"
-                }
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
                 script {
                     // Activate the virtual environment and install dependencies
-                    bat ".\\venv\\Scripts\\activate && PYTHON_PATH -m pip install --upgrade pip && pip install -r requirements.txt"
+                    bat "PYTHON_PATH -m pip install --upgrade pip && pip install -r requirements.txt"
                 }
             }
         }
@@ -39,7 +30,7 @@ pipeline {
             steps {
                 script {
                     // Activate the virtual environment and run the test cases
-                    bat ".\\venv\\Scripts\\activate && PYTHON_PATH Friends4Lyfe/tests/unit_test.py"
+                    bat "PYTHON_PATH Friends4Lyfe/tests/unit_test.py"
                 }
             }
         }
