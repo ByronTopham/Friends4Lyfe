@@ -119,19 +119,34 @@ def index():
             flash(f"Configuration '{request.form['load_config']}' loaded.")
 
             # After loading, update the form with the loaded configuration values
-            return render_template('index.html',
-                                   configurations=configurations,
-                                   selected_config=selected_config,
-                                   stockname=selected_config[2],  # stock1
-                                   start=selected_config[3],       # start_date
-                                   end=selected_config[4],         # end_date
-                                   time_step=selected_config[5],   # timestep
-                                   color1=selected_config[6],      # color1
-                                   stockname2=selected_config[7],  # stock2
-                                   color2=selected_config[8],      # color2
-                                   bestfit_checked=bool(selected_config[9]),
-                                   filename=filename)
-
+            if selected_config:
+                # If a configuration is loaded, populate the form with its values
+                return render_template('index.html',
+                                       configurations=configurations,
+                                       selected_config=selected_config,
+                                       stockname=selected_config[2],  # stock1
+                                       start=selected_config[3],  # start_date
+                                       end=selected_config[4],  # end_date
+                                       time_step=selected_config[5],  # timestep
+                                       color1=selected_config[6],  # color1
+                                       stockname2=selected_config[7],  # stock2
+                                       color2=selected_config[8],  # color2
+                                       bestfit_checked=bool(selected_config[9]),
+                                       filename=filename)
+            else:
+                # If no configuration is loaded, use default values
+                return render_template('index.html',
+                                       configurations=configurations,
+                                       selected_config=None,
+                                       stockname='AAPL',  # Default stock name
+                                       start='2020-01-01',  # Default start date
+                                       end='2023-01-01',  # Default end date
+                                       time_step='1 day',  # Default time step
+                                       color1='blue',  # Default color1
+                                       stockname2='',  # Default no second stock
+                                       color2='red',  # Default color2
+                                       bestfit_checked=False,
+                                       filename=filename)
         # Handle downloading configuration as JSON
         elif action == 'download':
             print("Downloading configuration")  # Debugging line
@@ -156,7 +171,7 @@ def index():
             time_step = request.form['timestep']
             color1 = request.form.get('color1', 'blue').lower()  # Default to 'blue' if color1 is not provided
             stock2 = request.form.get('stockname2', None)
-            color2 = request.form.get('color2', None)
+            color2 = request.form.get('color2', 'red')
             show_best_fit = 'bestfit' in request.form
 
             # Parse start and end dates

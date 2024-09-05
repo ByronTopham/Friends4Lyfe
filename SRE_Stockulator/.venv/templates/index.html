@@ -4,28 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stockulator</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
-        .container {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-        }
-
-        .form-column {
-            width: 30%;
-            padding-right: 20px;
-        }
-
-        .graph-column {
-            width: 65%;
-            padding-left: 20px;
-        }
-
-        img {
+        .graph-column img {
             max-width: 100%;
             height: auto;
         }
     </style>
+
     <script>
         function updateColorOptions() {
             var color1 = document.getElementById("color1").value;
@@ -54,96 +43,125 @@
     </script>
 </head>
 <body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">STOCKULATOR</h1>
 
-    <h1>STOCKULATOR</h1>
+        <div class="row">
+            <div class="col-md-4">
+                <form method="POST" class="form">
+                    <!-- Load Configuration -->
+                    <div class="form-group">
+                        <label for="load_config">Load Configuration:</label>
+                        <select id="load_config" name="load_config" class="form-control">
+                            <option value="none">None</option>
+                            {% for config in configurations %}
+                                <option value="{{ config[0] }}" {% if selected_config and selected_config[1] == config[0] %}selected{% endif %}>{{ config[0] }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" name="action" value="load" class="btn btn-secondary mt-2">Load</button>
+                    </div>
 
-    <div class="container">
-        <div class="form-column">
-            <form method="POST">
-                <label for="load_config">Load Configuration:</label>
-                <select id="load_config" name="load_config">
-                    <option value="none">None</option>
-                    {% for config in configurations %}
-                        <option value="{{ config[0] }}" {% if selected_config and selected_config[1] == config[0] %}selected{% endif %}>{{ config[0] }}</option>
-                    {% endfor %}
-                </select>
-                <button type="submit" name="action" value="load">Load</button><br><br>
+                    <!-- Stock Name -->
+                    <div class="form-group">
+                        <label for="stockname">Stock Name:</label>
+                        <input type="text" id="stockname" name="stockname" value="{{ stockname if stockname else 'AAPL' }}" class="form-control">
+                    </div>
 
-                <label for="stockname">Stock Name:</label>
-                <input type="text" id="stockname" name="stockname" value="{{ stockname if stockname else 'AAPL' }}"><br><br>
+                    <!-- Start Date -->
+                    <div class="form-group">
+                        <label for="start">Start Date:</label>
+                        <input type="date" id="start" name="start" value="{{ start if start else '2020-01-01' }}" class="form-control">
+                    </div>
 
-                <label for="start">Start Date:</label>
-                <input type="date" id="start" name="start" value="{{ start if start else '2020-01-01' }}"><br><br>
+                    <!-- End Date -->
+                    <div class="form-group">
+                        <label for="end">End Date:</label>
+                        <input type="date" id="end" name="end" value="{{ end if end else '2023-01-01' }}" class="form-control">
+                    </div>
 
-                <label for="end">End Date:</label>
-                <input type="date" id="end" name="end" value="{{ end if end else '2023-01-01' }}"><br><br>
+                    <!-- Time Step -->
+                    <div class="form-group">
+                        <label for="timestep">Time Step:</label>
+                        <select id="timestep" name="timestep" class="form-control">
+                            <option value="1 day" {% if time_step == '1 day' %}selected{% endif %}>1 Day</option>
+                            <option value="1 week" {% if time_step == '1 week' %}selected{% endif %}>1 Week</option>
+                        </select>
+                    </div>
 
-                <label for="timestep">Time Step:</label>
-                <select id="timestep" name="timestep">
-                    <option value="1 day" {% if time_step == '1 day' %}selected{% endif %}>1 Day</option>
-                    <option value="1 week" {% if time_step == '1 week' %}selected{% endif %}>1 Week</option>
-                </select><br><br>
+                    <!-- Color for Stock 1 -->
+                    <div class="form-group">
+                        <label for="color1">Color for Stock 1:</label>
+                        <select id="color1" name="color1" class="form-control" onchange="updateColorOptions()">
+                            <option value="blue" {% if color1 == 'blue' %}selected{% endif %}>Blue</option>
+                            <option value="red" {% if color1 == 'red' %}selected{% endif %}>Red</option>
+                            <option value="green" {% if color1 == 'green' %}selected{% endif %}>Green</option>
+                            <option value="yellow" {% if color1 == 'yellow' %}selected{% endif %}>Yellow</option>
+                            <option value="purple" {% if color1 == 'purple' %}selected{% endif %}>Purple</option>
+                            <option value="orange" {% if color1 == 'orange' %}selected{% endif %}>Orange</option>
+                            <option value="pink" {% if color1 == 'pink' %}selected{% endif %}>Pink</option>
+                        </select>
+                    </div>
 
-                <label for="color1">Color for Stock 1:</label>
-                <select id="color1" name="color1" onchange="updateColorOptions()">
-                    <option value="blue" {% if color1 == 'blue' %}selected{% endif %}>Blue</option>
-                    <option value="red" {% if color1 == 'red' %}selected{% endif %}>Red</option>
-                    <option value="green" {% if color1 == 'green' %}selected{% endif %}>Green</option>
-                    <option value="yellow" {% if color1 == 'yellow' %}selected{% endif %}>Yellow</option>
-                    <option value="purple" {% if color1 == 'purple' %}selected{% endif %}>Purple</option>
-                    <option value="orange" {% if color1 == 'orange' %}selected{% endif %}>Orange</option>
-                    <option value="pink" {% if color1 == 'pink' %}selected{% endif %}>Pink</option>
-                </select><br><br>
+                    <!-- Second Stock Name -->
+                    <div class="form-group">
+                        <label for="stockname2">Second Stock Name (optional):</label>
+                        <input type="text" id="stockname2" name="stockname2" value="{{ stockname2 if stockname2 else '' }}" class="form-control">
+                    </div>
 
-                <label for="stockname2">Second Stock Name (optional):</label>
-                <input type="text" id="stockname2" name="stockname2" value="{{ stockname2 if stockname2 else '' }}"><br><br>
+                    <!-- Color for Stock 2 -->
+                    <div class="form-group">
+                        <label for="color2">Color for Stock 2:</label>
+                        <select id="color2" name="color2" class="form-control" onchange="updateColorOptions()">
+                            <option value="blue" {% if color2 == 'blue' %}selected{% endif %}>Blue</option>
+                            <option value="red" {% if selected_config and selected_config[8] == 'red' or not selected_config %}selected{% endif %}>Red</option>
+                            <option value="green" {% if color2 == 'green' %}selected{% endif %}>Green</option>
+                            <option value="yellow" {% if color2 == 'yellow' %}selected{% endif %}>Yellow</option>
+                            <option value="purple" {% if color2 == 'purple' %}selected{% endif %}>Purple</option>
+                            <option value="orange" {% if color2 == 'orange' %}selected{% endif %}>Orange</option>
+                            <option value="pink" {% if color2 == 'pink' %}selected{% endif %}>Pink</option>
+                        </select>
+                    </div>
 
-                <label for="color2">Color for Stock 2:</label>
-                <select id="color2" name="color2" onchange="updateColorOptions()">
-                    <option value="blue" {% if color2 == 'blue' %}selected{% endif %}>Blue</option>
-                    <option value="red" {% if color2 == 'red' %}selected{% endif %}>Red</option>
-                    <option value="green" {% if color2 == 'green' %}selected{% endif %}>Green</option>
-                    <option value="yellow" {% if color2 == 'yellow' %}selected{% endif %}>Yellow</option>
-                    <option value="purple" {% if color2 == 'purple' %}selected{% endif %}>Purple</option>
-                    <option value="orange" {% if color2 == 'orange' %}selected{% endif %}>Orange</option>
-                    <option value="pink" {% if color2 == 'pink' %}selected{% endif %}>Pink</option>
-                </select><br><br>
+                    <!-- Best Fit Line Checkbox -->
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="bestfit" name="bestfit" {% if bestfit_checked %}checked{% endif %}>
+                        <label class="form-check-label" for="bestfit">Add Line of Best Fit</label>
+                    </div>
 
-                <label for="bestfit">Add Line of Best Fit:</label>
-                <input type="checkbox" id="bestfit" name="bestfit" {% if bestfit_checked %}checked{% endif %}><br><br>
+                    <!-- Buttons -->
+                    <div class="form-group">
+                        <button type="submit" name="action" value="generate" class="btn btn-primary mb-2">Generate</button>
+                        <button type="submit" name="action" value="save" class="btn btn-success mb-2">Save Configuration</button>
+                        <button type="submit" name="action" value="download" class="btn btn-info mb-2">Download Configuration</button>
+                    </div>
 
-                <!-- Generate button -->
-                <button type="submit" name="action" value="generate">Generate</button>
+                    <!-- Flash Messages -->
+                    <div>
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        <ul class="alert alert-warning">
+                            {% for message in messages %}
+                            <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+                </form>
+            </div>
 
-                <!-- Save configuration -->
-                <label for="config_name">Save Configuration As:</label>
-                <input type="text" id="config_name" name="config_name"><br><br>
-                <button type="submit" name="action" value="save">Save Configuration</button>
-
-                <!-- Download configuration -->
-                <button type="submit" name="action" value="download">Download Configuration</button>
-
-                <div>
-                    {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                    <ul>
-                        {% for message in messages %}
-                        <li>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
-                    {% endwith %}
-                </div>
-            </form>
-        </div>
-
-        <!-- Graph column -->
-        <div class="graph-column">
-            {% if filename %}
-                <img src="{{ url_for('static', filename=filename) }}" alt="Stock Graph">
-            {% endif %}
+            <!-- Graph column -->
+            <div class="col-md-8 graph-column">
+                {% if filename %}
+                    <img src="{{ url_for('static', filename=filename) }}" alt="Stock Graph" class="img-fluid mt-4">
+                {% endif %}
+            </div>
         </div>
     </div>
 
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
