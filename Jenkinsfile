@@ -20,7 +20,7 @@ pipeline {
             steps {
                 script {
                     // Run the test cases
-                    bat 'python Friends4Lyfe/tests/unit_test.py'
+                    bat '"C:\Users\pawan\AppData\Local\Programs\Python\Python312\python.exe" Friends4Lyfe/tests/unit_test.py'
                 }
             }
         }
