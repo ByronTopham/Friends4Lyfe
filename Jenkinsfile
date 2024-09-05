@@ -31,7 +31,7 @@ pipeline {
             steps {
                 script {
                     // Install Python and required packages
-                    bat '%PYTHON_PATH% -m pip install --upgrade pip'
+                    bat 'set PYTHONHOME=C:\\Users\\pawan\\AppData\\Local\\Programs\\Python\\Python312 && C:\\Users\\pawan\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pip install --upgrade pip'
                     bat 'pip install Flask'
                     bat 'pip install pytest'
                     
