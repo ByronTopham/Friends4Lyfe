@@ -7,6 +7,7 @@ pipeline {
         DOCKER_IMAGE = 'akanshapal/stock-calculator-final:latest'
         KUBE_NAMESPACE = 'default' // Kubernetes namespace to deploy to
         AWS_CREDENTIALS_ID = 'aws-credentials-id'
+	PYTHON_PATH = 'C:\\Users\\pawan\\AppData\\Local\\Programs\\Python\\Python312\\python.exe'
     }
 
     stages {
@@ -30,7 +31,7 @@ pipeline {
             steps {
                 script {
                     // Install Python and required packages
-                    bat 'python -m pip install --upgrade pip'
+                    bat '%PYTHON_PATH% -m pip install --upgrade pip'
                     bat 'pip install Flask'
                     bat 'pip install pytest'
                     
