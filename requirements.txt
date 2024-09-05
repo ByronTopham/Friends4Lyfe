@@ -3,3 +3,6 @@ pandas
 yfinance
 flask
 pytest
+prometheus_client
+psutil
+time
