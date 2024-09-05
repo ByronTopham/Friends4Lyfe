@@ -1,0 +1,100 @@
+# HELP python_gc_objects_collected_total Objects collected during gc
+# TYPE python_gc_objects_collected_total counter
+python_gc_objects_collected_total{generation="0"} 2239.0
+python_gc_objects_collected_total{generation="1"} 7949.0
+python_gc_objects_collected_total{generation="2"} 0.0
+# HELP python_gc_objects_uncollectable_total Uncollectable objects found during GC
+# TYPE python_gc_objects_uncollectable_total counter
+python_gc_objects_uncollectable_total{generation="0"} 0.0
+python_gc_objects_uncollectable_total{generation="1"} 0.0
+python_gc_objects_uncollectable_total{generation="2"} 0.0
+# HELP python_gc_collections_total Number of times this generation was collected
+# TYPE python_gc_collections_total counter
+python_gc_collections_total{generation="0"} 293.0
+python_gc_collections_total{generation="1"} 26.0
+python_gc_collections_total{generation="2"} 2.0
+# HELP python_info Python platform information
+# TYPE python_info gauge
+python_info{implementation="CPython",major="3",minor="12",patchlevel="3",version="3.12.3"} 1.0
+# HELP generate_button_clicks_total Number of times the Generate button has been clicked
+# TYPE generate_button_clicks_total counter
+generate_button_clicks_total 3.0
+# HELP generate_button_clicks_created Number of times the Generate button has been clicked
+# TYPE generate_button_clicks_created gauge
+generate_button_clicks_created 1.725571978295268e+09
+# HELP http_requests_total Total HTTP requests made to the application
+# TYPE http_requests_total counter
+http_requests_total 12.0
+# HELP http_requests_created Total HTTP requests made to the application
+# TYPE http_requests_created gauge
+http_requests_created 1.725571978295268e+09
+# HELP cpu_usage_percent CPU usage percentage
+# TYPE cpu_usage_percent gauge
+cpu_usage_percent 7.2
+# HELP memory_usage_percent Memory usage percentage
+# TYPE memory_usage_percent gauge
+memory_usage_percent 59.8
+# HELP best_fit_usage_total Number of times the line of best fit was selected
+# TYPE best_fit_usage_total counter
+best_fit_usage_total 2.0
+# HELP best_fit_usage_created Number of times the line of best fit was selected
+# TYPE best_fit_usage_created gauge
+best_fit_usage_created 1.725571978295268e+09
+# HELP total_graph_generations_total Total number of graph generations
+# TYPE total_graph_generations_total counter
+total_graph_generations_total 3.0
+# HELP total_graph_generations_created Total number of graph generations
+# TYPE total_graph_generations_created gauge
+total_graph_generations_created 1.725571978295268e+09
+# HELP best_fit_percentage Percentage of graphs generated with best fit selected
+# TYPE best_fit_percentage gauge
+best_fit_percentage 66.66666666666666
+# HELP compare_function_usage_total Number of times the compare function was used
+# TYPE compare_function_usage_total counter
+compare_function_usage_total 2.0
+# HELP compare_function_usage_created Number of times the compare function was used
+# TYPE compare_function_usage_created gauge
+compare_function_usage_created 1.7255719782961724e+09
+# HELP compare_function_percentage Percentage of graphs generated with compare function
+# TYPE compare_function_percentage gauge
+compare_function_percentage 66.66666666666666
+# HELP api_fetch_errors_total Number of API errors while fetching stock data
+# TYPE api_fetch_errors_total counter
+api_fetch_errors_total 0.0
+# HELP api_fetch_errors_created Number of API errors while fetching stock data
+# TYPE api_fetch_errors_created gauge
+api_fetch_errors_created 1.7255719782961724e+09
+# HELP http_500_errors_total Number of HTTP 500 errors (internal server errors)
+# TYPE http_500_errors_total counter
+http_500_errors_total 0.0
+# HELP http_500_errors_created Number of HTTP 500 errors (internal server errors)
+# TYPE http_500_errors_created gauge
+http_500_errors_created 1.7255719782961724e+09
+# HELP request_latency_seconds Request latency in seconds
+# TYPE request_latency_seconds histogram
+request_latency_seconds_bucket{le="0.1"} 0.0
+request_latency_seconds_bucket{le="0.5"} 0.0
+request_latency_seconds_bucket{le="1.0"} 0.0
+request_latency_seconds_bucket{le="2.5"} 11.0
+request_latency_seconds_bucket{le="5.0"} 11.0
+request_latency_seconds_bucket{le="10.0"} 11.0
+request_latency_seconds_bucket{le="+Inf"} 11.0
+request_latency_seconds_count 11.0
+request_latency_seconds_sum 23.052964448928833
+# HELP request_latency_seconds_created Request latency in seconds
+# TYPE request_latency_seconds_created gauge
+request_latency_seconds_created 1.7255719782961724e+09
+# HELP graph_generation_latency_seconds Latency of graph generation in seconds
+# TYPE graph_generation_latency_seconds histogram
+graph_generation_latency_seconds_bucket{le="0.1"} 0.0
+graph_generation_latency_seconds_bucket{le="0.5"} 3.0
+graph_generation_latency_seconds_bucket{le="1.0"} 3.0
+graph_generation_latency_seconds_bucket{le="2.5"} 3.0
+graph_generation_latency_seconds_bucket{le="5.0"} 3.0
+graph_generation_latency_seconds_bucket{le="10.0"} 3.0
+graph_generation_latency_seconds_bucket{le="+Inf"} 3.0
+graph_generation_latency_seconds_count 3.0
+graph_generation_latency_seconds_sum 0.7091474000189919
+# HELP graph_generation_latency_seconds_created Latency of graph generation in seconds
+# TYPE graph_generation_latency_seconds_created gauge
+graph_generation_latency_seconds_created 1.7255719782961724e+09
