@@ -28,4 +28,4 @@ jobs:
 
     - name: Run unit tests
       run: |
-        python -m unittest discover -s .venv -p '*_test.py' -v
+        python -m unittest discover -s tests -p '*_test.py' -v

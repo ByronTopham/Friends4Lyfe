@@ -9,7 +9,8 @@ import pandas as pd
 from io import BytesIO
 import os
 
-from app.main import app, init_db, save_configuration, load_configurations, get_configuration
+sys.path.insert(0, os.path.abspath('SRE_Stockulator/.venv'))
+from main import app, init_db, save_configuration, load_configurations, get_configuration
 
 class FlaskAppTestCase(unittest.TestCase):
     def setUp(self):
