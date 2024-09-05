@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stockulator</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .graph-column img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+
+    <script>
+        function updateColorOptions() {
+            var color1 = document.getElementById("color1").value;
+            var color2 = document.getElementById("color2").value;
+            var color1Options = document.getElementById("color1").options;
+            var color2Options = document.getElementById("color2").options;
+
+            for (var i = 0; i < color1Options.length; i++) {
+                color1Options[i].disabled = false;
+                color2Options[i].disabled = false;
+            }
+
+            for (var i = 0; i < color1Options.length; i++) {
+                if (color1Options[i].value === color2) {
+                    color1Options[i].disabled = true;
+                }
+                if (color2Options[i].value === color1) {
+                    color2Options[i].disabled = true;
+                }
+            }
+        }
+
+        window.onload = function() {
+            updateColorOptions();
+        }
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">STOCKULATOR</h1>
+
+        <div class="row">
+            <div class="col-md-4">
+                <form method="POST" class="form">
+                    <!-- Load Configuration -->
+                    <div class="form-group">
+                        <label for="load_config">Load Configuration:</label>
+                        <select id="load_config" name="load_config" class="form-control">
+                            <option value="none">None</option>
+                            {% for config in configurations %}
+                                <option value="{{ config[0] }}" {% if selected_config and selected_config[1] == config[0] %}selected{% endif %}>{{ config[0] }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" name="action" value="load" class="btn btn-secondary mt-2">Load</button>
+                    </div>
+
+                    <!-- Stock Name -->
+                    <div class="form-group">
+                        <label for="stockname">Stock Name:</label>
+                        <input type="text" id="stockname" name="stockname" value="{{ stockname if stockname else 'AAPL' }}" class="form-control">
+                    </div>
+
+                    <!-- Start Date -->
+                    <div class="form-group">
+                        <label for="start">Start Date:</label>
+                        <input type="date" id="start" name="start" value="{{ start if start else '2020-01-01' }}" class="form-control">
+                    </div>
+
+                    <!-- End Date -->
+                    <div class="form-group">
+                        <label for="end">End Date:</label>
+                        <input type="date" id="end" name="end" value="{{ end if end else '2023-01-01' }}" class="form-control">
+                    </div>
+
+                    <!-- Time Step -->
+                    <div class="form-group">
+                        <label for="timestep">Time Step:</label>
+                        <select id="timestep" name="timestep" class="form-control">
+                            <option value="1 day" {% if time_step == '1 day' %}selected{% endif %}>1 Day</option>
+                            <option value="1 week" {% if time_step == '1 week' %}selected{% endif %}>1 Week</option>
+                        </select>
+                    </div>
+
+                    <!-- Color for Stock 1 -->
+                    <div class="form-group">
+                        <label for="color1">Color for Stock 1:</label>
+                        <select id="color1" name="color1" class="form-control" onchange="updateColorOptions()">
+                            <option value="blue" {% if color1 == 'blue' %}selected{% endif %}>Blue</option>
+                            <option value="red" {% if color1 == 'red' %}selected{% endif %}>Red</option>
+                            <option value="green" {% if color1 == 'green' %}selected{% endif %}>Green</option>
+                            <option value="yellow" {% if color1 == 'yellow' %}selected{% endif %}>Yellow</option>
+                            <option value="purple" {% if color1 == 'purple' %}selected{% endif %}>Purple</option>
+                            <option value="orange" {% if color1 == 'orange' %}selected{% endif %}>Orange</option>
+                            <option value="pink" {% if color1 == 'pink' %}selected{% endif %}>Pink</option>
+                        </select>
+                    </div>
+
+                    <!-- Second Stock Name -->
+                    <div class="form-group">
+                        <label for="stockname2">Second Stock Name (optional):</label>
+                        <input type="text" id="stockname2" name="stockname2" value="{{ stockname2 if stockname2 else '' }}" class="form-control">
+                    </div>
+
+                    <!-- Color for Stock 2 -->
+                    <div class="form-group">
+                        <label for="color2">Color for Stock 2:</label>
+                        <select id="color2" name="color2" class="form-control" onchange="updateColorOptions()">
+                            <option value="blue" {% if color2 == 'blue' %}selected{% endif %}>Blue</option>
+                            <option value="red" {% if selected_config and selected_config[8] == 'red' or not selected_config %}selected{% endif %}>Red</option>
+                            <option value="green" {% if color2 == 'green' %}selected{% endif %}>Green</option>
+                            <option value="yellow" {% if color2 == 'yellow' %}selected{% endif %}>Yellow</option>
+                            <option value="purple" {% if color2 == 'purple' %}selected{% endif %}>Purple</option>
+                            <option value="orange" {% if color2 == 'orange' %}selected{% endif %}>Orange</option>
+                            <option value="pink" {% if color2 == 'pink' %}selected{% endif %}>Pink</option>
+                        </select>
+                    </div>
+
+                    <!-- Best Fit Line Checkbox -->
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="bestfit" name="bestfit" {% if bestfit_checked %}checked{% endif %}>
+                        <label class="form-check-label" for="bestfit">Add Line of Best Fit</label>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="form-group">
+                        <button type="submit" name="action" value="generate" class="btn btn-primary mb-2">Generate</button>
+                        <button type="submit" name="action" value="save" class="btn btn-success mb-2">Save Configuration</button>
+                        <button type="submit" name="action" value="download" class="btn btn-info mb-2">Download Configuration</button>
+                    </div>
+
+                    <!-- Flash Messages -->
+                    <div>
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        <ul class="alert alert-warning">
+                            {% for message in messages %}
+                            <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+                </form>
+            </div>
+
+            <!-- Graph column -->
+            <div class="col-md-8 graph-column">
+                {% if filename %}
+                    <img src="{{ url_for('static', filename=filename) }}" alt="Stock Graph" class="img-fluid mt-4">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

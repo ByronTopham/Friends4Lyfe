@@ -10,7 +10,7 @@ import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from datetime import datetime
 
-app = Flask(__name__, static_folder='/app/static') ##remove static_folder for local run
+app = Flask(__name__, static_folder='/app/static')
 app.secret_key = 'your_secret_key'
 
 
