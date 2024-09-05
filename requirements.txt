@@ -5,4 +5,3 @@ flask
 pytest
 prometheus_client
 psutil
-time
