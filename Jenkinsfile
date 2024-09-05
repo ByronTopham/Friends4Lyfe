@@ -16,15 +16,6 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                script {
-                    // Install Python and dependencies; adjust paths as necessary
-                    bat 'pip install -r requirements.txt'
-                }
-            }
-        }
-
         stage('Run Tests') {
             steps {
                 script {
