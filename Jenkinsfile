@@ -29,8 +29,13 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
-                    // Add your test commands if applicable
-                    bat 'echo Running tests...'
+                    // Install Python and required packages
+                    bat 'python -m pip install --upgrade pip'
+                    bat 'pip install Flask'
+                    bat 'pip install pytest'
+                    
+                    // Run unit tests
+                    bat 'pytest tests/unit_test.py'
                 }
             }
         }
