@@ -10,7 +10,7 @@ import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from datetime import datetime
 
-app = Flask(__name__, static_folder='/app/static') # , static_folder='/app/static'
+app = Flask(__name__) # , static_folder='/app/static'
 app.secret_key = 'your_secret_key'
 
 
@@ -279,7 +279,7 @@ def index():
             ax.set_title(f"Stock Prices from {start_date_parsed.strftime('%Y-%m-%d')} to {end_date_parsed.strftime('%Y-%m-%d')}")
 
             # Save the plot
-            plot_path = os.path.join('static', 'plot.png')
+            plot_path = os.path.join('app', 'static', 'plot.png')
 
             if not os.path.exists('static'):
                 os.makedirs('static')
