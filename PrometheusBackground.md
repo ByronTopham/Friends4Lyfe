@@ -317,7 +317,7 @@ Here’s a breakdown of how you would use counters in practical situations:
    When tracking the number of errors or failures, you can increment the counter every time an error happens.
   ```
 	 errorCounter.Inc()   // Increases every time an error occurs
-```
+
 3. **Tracking Processed Data**
    You can use a counter to measure cumulative data processed over time, for example, the total number of bytes transferred.
 ```
