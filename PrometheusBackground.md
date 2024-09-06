@@ -1,4 +1,176 @@
 ## Installation
+Here’s a **Prometheus installation guide** for setting up Prometheus **locally** in **Markdown format**:
+
+```markdown
+# Prometheus Installation on Local Machine
+
+This guide will walk you through the process of installing Prometheus on a local machine.
+
+## Prerequisites
+Ensure you have the following prerequisites before proceeding with the installation:
+
+- **Operating System**: Linux, macOS, or Windows.
+- **Docker** (optional): If you prefer to run Prometheus in a Docker container.
+- **Admin/Sudo Access**: You will need administrative rights to install software packages.
+
+---
+
+## Option 1: Installing Prometheus Locally (Direct Install)
+
+### 1. Download Prometheus
+Visit the official [Prometheus download page](https://prometheus.io/download/) and download the appropriate version for your operating system. 
+
+Alternatively, you can use the following command to download the latest version (Linux/macOS example):
+
+```bash
+curl -LO https://github.com/prometheus/prometheus/releases/download/v2.46.0/prometheus-2.46.0.linux-amd64.tar.gz
+```
+
+### 2. Extract the Prometheus Archive
+Extract the downloaded archive:
+
+```bash
+tar -xvf prometheus-*.tar.gz
+```
+
+### 3. Move the Binary Files
+Move the Prometheus binary files to a suitable location:
+
+```bash
+sudo mv prometheus-2.46.0.linux-amd64/prometheus /usr/local/bin/
+sudo mv prometheus-2.46.0.linux-amd64/promtool /usr/local/bin/
+```
+
+### 4. Configure Prometheus
+Create a configuration file named `prometheus.yml` in a directory (e.g., `/etc/prometheus/`) with the following content:
+
+```yaml
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+```
+
+Move the configuration file to the desired directory:
+
+```bash
+sudo mkdir -p /etc/prometheus
+sudo mv prometheus-2.46.0.linux-amd64/prometheus.yml /etc/prometheus/
+```
+
+### 5. Start Prometheus
+Run Prometheus using the following command:
+
+```bash
+prometheus --config.file=/etc/prometheus/prometheus.yml
+```
+
+Prometheus will now start, and you can access the web interface at `http://localhost:9090`.
+
+---
+
+## Option 2: Running Prometheus in Docker
+
+### 1. Install Docker (If Not Installed)
+If you haven't installed Docker yet, install it from the official Docker website: [Docker Installation Guide](https://docs.docker.com/get-docker/).
+
+### 2. Pull the Prometheus Docker Image
+You can pull the official Prometheus image from Docker Hub:
+
+```bash
+docker pull prom/prometheus
+```
+
+### 3. Run Prometheus in a Container
+Run Prometheus in a Docker container with a basic configuration:
+
+```bash
+docker run -d \
+    --name prometheus \
+    -p 9090:9090 \
+    -v /path/to/your/prometheus.yml:/etc/prometheus/prometheus.yml \
+    prom/prometheus
+```
+
+Make sure to replace `/path/to/your/prometheus.yml` with the actual path to your `prometheus.yml` file on your local machine.
+
+### 4. Access Prometheus Web UI
+Once the container is running, Prometheus will be accessible on `http://localhost:9090`.
+
+---
+
+## Verifying Prometheus Installation
+
+### 1. Access the Prometheus Web UI
+You can access Prometheus by opening your browser and navigating to:
+
+```bash
+http://localhost:9090
+```
+
+### 2. Test a Query
+Once Prometheus is up and running, you can execute basic queries in the Prometheus web UI.
+
+For example, enter the following query to check Prometheus uptime:
+
+```promql
+up
+```
+
+You should see metrics indicating whether Prometheus is up and running.
+
+---
+
+## Managing Prometheus
+
+### Starting Prometheus Automatically
+To make Prometheus start automatically on boot, you can create a systemd service file on Linux. Here’s an example:
+
+```bash
+sudo nano /etc/systemd/system/prometheus.service
+```
+
+Add the following content:
+
+```ini
+[Unit]
+Description=Prometheus Service
+After=network.target
+
+[Service]
+User=prometheus
+ExecStart=/usr/local/bin/prometheus --config.file=/etc/prometheus/prometheus.yml
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Reload the systemd configuration:
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable prometheus
+```
+
+Now, Prometheus will start automatically on boot.
+
+---
+
+## Conclusion
+You have successfully installed and started Prometheus locally. You can now configure additional scrape targets, set up alerts, and use the Prometheus web interface for monitoring. Explore more about Prometheus through [official documentation](https://prometheus.io/docs/).
+```
+
+### Key Points:
+- **Option 1**: Direct installation of Prometheus on a local machine.
+- **Option 2**: Running Prometheus in a Docker container for simplicity and isolation.
+- **Accessing Prometheus**: Prometheus is available at `http://localhost:9090` by default.
+- **Managing Prometheus**: If using a local installation, Prometheus can be set up as a service for automatic startup.
+
+This Markdown guide can be easily shared or uploaded for use in documentation platforms.
 
 ## Architecture 
 ![[Pasted image 20240905154733.png]]
