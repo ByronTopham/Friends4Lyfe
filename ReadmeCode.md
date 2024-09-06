@@ -25,31 +25,6 @@ Ensure that you have the following dependencies installed:
 - YFinance
 - SQLite (for database storage of configurations)
 
-### Installation
-
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/yourusername/Stockulator.git
-   cd Stockulator
-   ```
-
-2. **Create and activate a virtual environment**:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install required packages**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Run the Flask application**:
-   ```bash
-   python main.py
-   ```
-
-5. Open your browser and navigate to `http://127.0.0.1:5000/`.
 
 ### SQLite Database Setup
 
@@ -118,10 +93,4 @@ Stockulator/
 - **Additional Graph Customization**: Add options for more graph customizations, such as line thickness, styles, and additional annotations.
 - **Performance Optimization**: Improve performance for generating graphs with large datasets.
 
-## Contributing
 
-If you'd like to contribute to Stockulator, please fork the repository and submit a pull request.
-
-### License
-
-This project is licensed under the MIT License.
