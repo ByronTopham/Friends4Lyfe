@@ -1,7 +1,5 @@
 ## Installation
-Here’s a **Prometheus installation guide** for setting up Prometheus **locally** in **Markdown format**:
 
-```markdown
 # Prometheus Installation on Local Machine
 
 This guide will walk you through the process of installing Prometheus on a local machine.
@@ -10,7 +8,6 @@ This guide will walk you through the process of installing Prometheus on a local
 Ensure you have the following prerequisites before proceeding with the installation:
 
 - **Operating System**: Linux, macOS, or Windows.
-- **Docker** (optional): If you prefer to run Prometheus in a Docker container.
 - **Admin/Sudo Access**: You will need administrative rights to install software packages.
 
 ---
