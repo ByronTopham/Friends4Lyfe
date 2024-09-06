@@ -1,4 +1,4 @@
-# Stockulator Documentation
+# Stockulator ReadMe
 
 ## Overview
 
