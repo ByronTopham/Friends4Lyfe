@@ -119,47 +119,6 @@ up
 
 You should see metrics indicating whether Prometheus is up and running.
 
----
-
-## Managing Prometheus
-
-### Starting Prometheus Automatically
-To make Prometheus start automatically on boot, you can create a systemd service file on Linux. Here’s an example:
-
-```bash
-sudo nano /etc/systemd/system/prometheus.service
-```
-
-Add the following content:
-
-```ini
-[Unit]
-Description=Prometheus Service
-After=network.target
-
-[Service]
-User=prometheus
-ExecStart=/usr/local/bin/prometheus --config.file=/etc/prometheus/prometheus.yml
-Restart=on-failure
-
-[Install]
-WantedBy=multi-user.target
-```
-
-Reload the systemd configuration:
-
-```bash
-sudo systemctl daemon-reload
-sudo systemctl enable prometheus
-```
-
-Now, Prometheus will start automatically on boot.
-
----
-
-## Conclusion
-You have successfully installed and started Prometheus locally. You can now configure additional scrape targets, set up alerts, and use the Prometheus web interface for monitoring. Explore more about Prometheus through [official documentation](https://prometheus.io/docs/).
-```
 
 ### Key Points:
 - **Option 1**: Direct installation of Prometheus on a local machine.
